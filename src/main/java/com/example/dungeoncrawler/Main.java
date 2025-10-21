@@ -7,7 +7,7 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("Dungeon-Crawler");
+        window.setTitle("T-Crawler");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);

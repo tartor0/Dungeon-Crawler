@@ -15,7 +15,9 @@ public class Player extends Entity{
 
     public final int screenX;
     public final int screenY;
-    int hasKey = 0;
+    public int hasKey = 0;
+    boolean moving = false;
+    int pixelCounter = 0;
 
     public Player (GamePanel gp, KeyHandler keyH){
 
@@ -27,12 +29,12 @@ public class Player extends Entity{
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
         solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 8;
+        solidArea.x = 1;
+        solidArea.y = 1;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 20;
-        solidArea.height = 20;
+        solidArea.width = 46;
+        solidArea.height = 46;
 
         setDefaultValues();
         getPlayerImage();
@@ -65,32 +67,41 @@ public class Player extends Entity{
 
     public void update() {
 
-        if(keyH.upPressed == true || keyH.downPressed == true ||
-                keyH.leftPressed == true || keyH.rightPressed == true) {
-            if(keyH.upPressed == true){
-                direction = "up";
+        if(moving == false){
 
+            if(keyH.upPressed == true || keyH.downPressed == true ||
+                    keyH.leftPressed == true || keyH.rightPressed == true) {
+                if(keyH.upPressed == true){
+                    direction = "up";
+
+                }
+                else if(keyH.downPressed == true){
+                    direction = "down";
+
+                }
+                else if(keyH.leftPressed == true){
+                    direction = "left";
+
+                }
+                else if(keyH.rightPressed == true){
+                    direction = "right";
+
+                }
+                moving = true;
+
+                //CHECK TILE COLLISION
+                collisionOn = false;
+                gp.cChecker.checkTile(this);
+
+                //CHECK OBJECT COLLISION
+                int objIndex = gp.cChecker.checkObject(this, true);
+                pickUpObject(objIndex);
+            }else{
+                spriteNum = 1;
             }
-            else if(keyH.downPressed == true){
-                direction = "down";
+        }
 
-            }
-            else if(keyH.leftPressed == true){
-                direction = "left";
-
-            }
-            else if(keyH.rightPressed == true){
-                direction = "right";
-
-            }
-
-            //CHECK TILE COLLISION
-            collisionOn = false;
-            gp.cChecker.checkTile(this);
-
-            //CHECK OBJECT COLLISION
-            int objIndex = gp.cChecker.checkObject(this, true);
-            pickUpObject(objIndex);
+        if(moving == true) {
 
             //COLLSION = FALSE, PLAYER CAN MOVE
             if(collisionOn == false) {
@@ -116,9 +127,13 @@ public class Player extends Entity{
                 spriteCounter = 0;
             }
 
+            pixelCounter += speed;
+            if(pixelCounter == 48){
+                moving = false;
+                pixelCounter = 0;
+            }
+
         }
-
-
     }
 
 
@@ -129,19 +144,32 @@ public class Player extends Entity{
 
             switch(objectName) {
                 case "Key":
+                    gp.playSE(1);
                     hasKey++;
                     gp.obj[i] = null;
+                    gp.ui.showMessage("You got a key!");
                     break;
                 case "Door":
                     if(hasKey > 0){
+                        gp.playSE(3);
                         gp.obj[i] = null;
+                        gp.ui.showMessage("You opened the door!");
                         hasKey--;
+                    }
+                    if(hasKey == 0){
+                        gp.ui.showMessage("You don't have a key!");
                     }
                     break;
                 case "Chest":
-                    if(hasKey > 0){
-                        gp.obj[i] = null;
-                    }
+                    gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    gp.playSE(4);
+                    break;
+                case "Boots":
+                    gp.playSE(2);
+                    speed += 4;
+                    gp.obj[i] = null;
+                    gp.ui.showMessage("Speed Up");
                     break;
             }
         }
