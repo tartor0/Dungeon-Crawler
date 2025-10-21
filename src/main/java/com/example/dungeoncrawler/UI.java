@@ -21,7 +21,7 @@ public class UI {
         //for font, first parameter is the font name, 2nd is the font style, 3rd is size
         arial_40 = new Font("Arial", Font.BOLD, 30);
         arial_80B = new Font("Arial", Font.BOLD, 80);
-        OBJ_Key key = new OBJ_Key();
+        OBJ_Key key = new OBJ_Key(gp);
         keyImage = key.image;
 
     }
@@ -60,14 +60,15 @@ public class UI {
             gp.gameThread = null;
 
         }else {
-            if (messageOn == true) {
+
+
                 g2.setFont(arial_40);
                 g2.setColor(Color.white);
                 g2.drawImage(keyImage, gp.tileSize/2, gp.tileSize/2, gp.tileSize, gp.tileSize, null);
                 g2.drawString("x = " + gp.player.hasKey, 74, 65);
 
                 //MESSAGE
-
+            if (messageOn == true) {
                 g2.setFont(g2.getFont().deriveFont(20F));
                 g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
 

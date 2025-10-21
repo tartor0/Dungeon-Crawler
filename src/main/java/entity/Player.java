@@ -2,6 +2,7 @@ package entity;
 
 import com.example.dungeoncrawler.GamePanel;
 import com.example.dungeoncrawler.KeyHandler;
+import com.example.dungeoncrawler.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -50,19 +51,30 @@ public class Player extends Entity{
     }
 
     public void getPlayerImage() {
-        try{
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
-        }
-        catch (IOException e){
+        up1 = setup("boy_up_1");
+        up2 = setup("boy_up_2");
+        down1 = setup("boy_down_1");
+        down2 = setup("boy_down_2");
+        left1 = setup("boy_left_1");
+        left2 = setup("boy_left_2");
+        right1 = setup("boy_right_1");
+        right2 = setup("boy_right_2");
+    }
+
+    public BufferedImage setup(String imageName) {
+
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+
+        }catch(IOException e){
             e.printStackTrace();
         }
+        return image;
+
     }
 
     public void update() {
@@ -155,8 +167,7 @@ public class Player extends Entity{
                         gp.obj[i] = null;
                         gp.ui.showMessage("You opened the door!");
                         hasKey--;
-                    }
-                    if(hasKey == 0){
+                    }else{
                         gp.ui.showMessage("You don't have a key!");
                     }
                     break;
@@ -216,7 +227,7 @@ public class Player extends Entity{
                 }
                 break;
         }
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, screenX, screenY, null);
 
     }
 

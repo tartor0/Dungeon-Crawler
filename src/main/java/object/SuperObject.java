@@ -1,6 +1,7 @@
 package object;
 
 import com.example.dungeoncrawler.GamePanel;
+import com.example.dungeoncrawler.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -14,6 +15,9 @@ public class SuperObject {
     public int solidAreaDefaultX = 0;
     public int solidAreaDefaultY = 0;
     public int worldX, worldY;
+    UtilityTool uTool = new UtilityTool();
+
+
 
     public void draw(Graphics2D g2, GamePanel gp) {
 
