@@ -11,6 +11,7 @@ module com.example.dungeoncrawler {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.desktop;
+//    requires com.example.dungeoncrawler;
 
     opens com.example.dungeoncrawler to javafx.fxml;
     exports com.example.dungeoncrawler;
