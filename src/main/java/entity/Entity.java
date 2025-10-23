@@ -17,7 +17,7 @@ public class Entity {
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
-    public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle solidArea = new Rectangle(0,0, 48, 48);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int lookActionCounter = 0;
@@ -64,11 +64,8 @@ public class Entity {
         if(collisionOn == false) {
             switch(direction) {
                 case "up": worldY -= speed; break;
-
                 case "down": worldY += speed; break;
-
                 case "left": worldX -= speed; break;
-
                 case "right": worldX += speed; break;
             }
         }

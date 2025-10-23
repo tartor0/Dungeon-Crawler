@@ -55,7 +55,7 @@ public class CollisionChecker {
             case "right":
                 entityRightCol = (entityRightWorldX + entity.speed)/gp.tileSize;
                 tileNum1 = gp.tileM.mapTileNum[entityRightCol] [entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol] [entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[entityRightCol] [entityBottomRow];
                 if (gp.tileM.tile[tileNum1].collision == true || gp.tileM.tile[tileNum2].collision == true) {
                     entity.collisionOn = true;
                 }
@@ -145,12 +145,12 @@ public class CollisionChecker {
             if(target[i] != null) {
 
                 //get entity's solid area position
-                entity.solidArea.x = entity.worldX + entity.solidArea.x;
-                entity.solidArea.y = entity.worldY + entity.solidArea.y;
+                entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
+                entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
 
                 //get object's solid area position
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+                target[i].solidArea.x = target[i].worldX + target[i].solidAreaDefaultX;
+                target[i].solidArea.y = target[i].worldY + target[i].solidAreaDefaultY;
 
 
                 switch (entity.direction) {
