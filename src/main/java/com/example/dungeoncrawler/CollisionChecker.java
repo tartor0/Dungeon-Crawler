@@ -194,12 +194,12 @@ public class CollisionChecker {
     public void checkPlayer(Entity entity) {
 
 
-        entity.solidArea.x = entity.worldX + entity.solidAreaDefaultX;
-        entity.solidArea.y = entity.worldY + entity.solidAreaDefaultY;
+        entity.solidArea.x = entity.worldX + entity.solidArea.x;
+        entity.solidArea.y = entity.worldY + entity.solidArea.x;
 
         //get object's solid area position
-        gp.player.solidArea.x = gp.player.worldX + gp.player.solidAreaDefaultX;
-        gp.player.solidArea.y = gp.player.worldY + gp.player.solidAreaDefaultY;
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
 
 
         switch (entity.direction) {

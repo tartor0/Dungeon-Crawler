@@ -46,6 +46,10 @@ public class Player extends Entity{
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+
+        //PLAYER STATUS
+        maxLife = 6;
+        life = maxLife;
     }
 
     public void getPlayerImage() {
@@ -94,6 +98,10 @@ public class Player extends Entity{
                 //CHECK NPC COLLISION
                 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
                 interactNPC(npcIndex);
+
+                //CHECK EVENT
+                gp.eHandler.checkEvent();
+                gp.keyH.enterPressed = false;
 
 
             }else{
@@ -151,7 +159,6 @@ public class Player extends Entity{
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
-            gp.keyH.enterPressed = false;
         }
     }
 
