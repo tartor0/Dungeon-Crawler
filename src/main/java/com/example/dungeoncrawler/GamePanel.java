@@ -2,11 +2,13 @@ package com.example.dungeoncrawler;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable{
 
@@ -39,8 +41,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     //ENTITY AND OBJECT
     public Player player = new Player(this, keyH);
-    public SuperObject obj[] = new SuperObject[10];
+    public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
 
     //GAME STATE
@@ -75,38 +78,6 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     @Override
-//    public void run() {
-//
-//        double drawInterval = 1000000000/FPS; // 0.01666 seconds
-//        double nextDrawTime = System.nanoTime() + drawInterval;
-//
-//        while (gameThread != null){
-//
-//            update();
-//
-//            repaint();
-//
-//
-//            try {
-//                double remainingTime = nextDrawTime - System.nanoTime();
-//                remainingTime = remainingTime/1000000;
-//
-//                if(remainingTime < 0){
-//                    remainingTime = 0;
-//                }
-//
-//                Thread.sleep((long) remainingTime);
-//
-//                nextDrawTime += drawInterval;
-//
-//            } catch (InterruptedException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        }
-//
-//    }
-
     public void run() {
         double drawInterval = 1000000000/FPS;
         double delta = 0;
@@ -171,22 +142,39 @@ public class GamePanel extends JPanel implements Runnable{
             //TILES
             tileM.draw(g2);
 
-            //OBJECT
-            for(int i = 0; i < obj.length; i++){
-                if(obj[i] != null) {
-                    obj[i].draw(g2, this);
-                }
-            }
+            //ADD ENTITIES TO THE LIST
+            entityList.add(player);
 
-            //NPC
             for(int i = 0; i < npc.length; i++){
                 if(npc[i] != null){
-                    npc[i].draw(g2);
+                    entityList.add(npc[i]);
                 }
-
             }
-            //PLAYER
-            player.draw(g2);
+            for(int i = 0; i < obj.length; i++){
+                if(obj[i] != null){
+                    entityList.add(obj[i]);
+                }
+            }
+
+            //SORT
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity e1, Entity e2) {
+
+                    int result = Integer.compare(e1.worldY, e2.worldY);
+                    return result;
+                }
+            });
+
+            //DRAW ENTITIES
+            for(int i= 0; i < entityList.size(); i++){
+                entityList.get(i).draw(g2);
+            }
+            //EMPTY ENTITY LIST
+            for(int i= 0; i < entityList.size(); i++){
+                entityList.remove(i);
+            }
+
 
             //UI
             ui.draw(g2);

@@ -17,6 +17,7 @@ public class Player extends Entity{
     public final int screenY;
     boolean moving = false;
     int pixelCounter = 0;
+    int standCounter = 0;
 
     public Player (GamePanel gp, KeyHandler keyH){
 
@@ -65,84 +66,75 @@ public class Player extends Entity{
 
     public void update() {
 
-        if(moving == false){
+        // ====== START MOVEMENT INPUT ======
+        if (!moving) {
+            if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
 
-            if(keyH.upPressed == true || keyH.downPressed == true ||
-                    keyH.leftPressed == true || keyH.rightPressed == true) {
-                if(keyH.upPressed == true){
-                    direction = "up";
+                if (keyH.upPressed) direction = "up";
+                else if (keyH.downPressed) direction = "down";
+                else if (keyH.leftPressed) direction = "left";
+                else if (keyH.rightPressed) direction = "right";
 
-                }
-                else if(keyH.downPressed == true){
-                    direction = "down";
-
-                }
-                else if(keyH.leftPressed == true){
-                    direction = "left";
-
-                }
-                else if(keyH.rightPressed == true){
-                    direction = "right";
-
-                }
+                // Start movement
                 moving = true;
-
-                //CHECK TILE COLLISION
-                collisionOn = false;
-                gp.cChecker.checkTile(this);
-
-                //CHECK OBJECT COLLISION
-                int objIndex = gp.cChecker.checkObject(this, true);
-                pickUpObject(objIndex);
-
-                //CHECK NPC COLLISION
-                int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
-                interactNPC(npcIndex);
-
-                //CHECK EVENT
-                gp.eHandler.checkEvent();
-                gp.keyH.enterPressed = false;
-
-
-            }else{
-                spriteNum = 1;
+                pixelCounter = 0;
+            } else {
+                // Idle animation
+                standCounter++;
+                if (standCounter == 20) {
+                    spriteNum = 1;
+                    standCounter = 0;
+                }
             }
         }
 
-        if(moving == true) {
+        // ====== DURING MOVEMENT ======
+        if (moving) {
+            // Reset collision each frame
+            collisionOn = false;
 
-            //COLLSION = FALSE, PLAYER CAN MOVE
-            if(collisionOn == false) {
-                switch(direction) {
+            // Check tile & object collision each frame while moving
+            gp.cChecker.checkTile(this);
+            int objIndex = gp.cChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
+            // Check NPC collision each frame
+            int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+            if (npcIndex != 999) {
+                interactNPC(npcIndex);
+                // Do NOT reset collisionOn here — let collision block movement
+            }
+
+            // Stop if collision detected
+            if (!collisionOn) {
+                switch (direction) {
                     case "up": worldY -= speed; break;
-
                     case "down": worldY += speed; break;
-
                     case "left": worldX -= speed; break;
-
                     case "right": worldX += speed; break;
                 }
             }
 
+            // Animate movement
             spriteCounter++;
-            if(spriteCounter > 12) {
-                if(spriteNum == 1){
-                    spriteNum = 2;
-                }
-                else if(spriteNum == 2){
-                    spriteNum = 1;
-                }
+            if (spriteCounter > 12) {
+                spriteNum = (spriteNum == 1) ? 2 : 1;
                 spriteCounter = 0;
             }
 
+            // Move 48 pixels total before stopping
             pixelCounter += speed;
-            if(pixelCounter == 48){
+            if (pixelCounter >= gp.tileSize) {
                 moving = false;
                 pixelCounter = 0;
             }
 
+            // Check event triggers each frame
+            gp.eHandler.checkEvent();
+            gp.keyH.enterPressed = false;
         }
     }
+
 
 
     public void pickUpObject(int i) {
@@ -154,6 +146,7 @@ public class Player extends Entity{
 
     public void interactNPC( int i) {
         if(i != 999){
+            System.out.println("you are hitting npc");
 
             if(gp.keyH.enterPressed == true) {
                 gp.gameState = gp.dialogueState;

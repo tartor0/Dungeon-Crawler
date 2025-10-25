@@ -10,7 +10,7 @@ public class NPC_OldMan extends Entity{
         super(gp);
 
         direction = "down";
-        speed = 0;
+        speed = 1;
 
         getImage();
         setDialogue();
