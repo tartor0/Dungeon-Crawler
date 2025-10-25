@@ -122,15 +122,19 @@ public class CollisionChecker {
                     entityBottom > targetTop && entityTop < targetBottom;
 
             if (intersects) {
-                entity.collisionOn = true;
-                index = i;
+                if(target[i] != entity) {
+                    entity.collisionOn = true;
+                    index = i;
+                }
             }
         }
 
         return index;
     }
 
-    public void checkPlayer(Entity entity) {
+    public boolean checkPlayer(Entity entity) {
+
+        boolean contactPlayer = false;
         int entityLeft = entity.worldX + entity.solidArea.x;
         int entityRight = entityLeft + entity.solidArea.width;
         int entityTop = entity.worldY + entity.solidArea.y;
@@ -151,6 +155,10 @@ public class CollisionChecker {
         boolean intersects = entityRight > playerLeft && entityLeft < playerRight &&
                 entityBottom > playerTop && entityTop < playerBottom;
 
-        if (intersects) entity.collisionOn = true;
+        if (intersects){
+            entity.collisionOn = true;
+            contactPlayer = true;
+        }
+        return contactPlayer;
     }
 }

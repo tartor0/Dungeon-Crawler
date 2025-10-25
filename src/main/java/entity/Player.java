@@ -90,20 +90,23 @@ public class Player extends Entity{
 
         // ====== DURING MOVEMENT ======
         if (moving) {
-            // Reset collision each frame
-            collisionOn = false;
 
-            // Check tile & object collision each frame while moving
+            //CHECK TILE COLLISION
+            collisionOn = false;
             gp.cChecker.checkTile(this);
+
+            //CHECK OBJECT COLLISION
             int objIndex = gp.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
-            // Check NPC collision each frame
+            //CHECK NPC COLLISION
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
-            if (npcIndex != 999) {
-                interactNPC(npcIndex);
-                // Do NOT reset collisionOn here — let collision block movement
-            }
+            interactNPC(npcIndex);
+
+            //CHECK MONSTER COLLISION
+            int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+            contactMonster(monsterIndex);
+
 
             // Stop if collision detected
             if (!collisionOn) {
@@ -133,10 +136,16 @@ public class Player extends Entity{
             gp.eHandler.checkEvent();
             gp.keyH.enterPressed = false;
         }
+
+        //this needs to be outside of key if statement
+        if(invincible == true){
+            invincibleCounter++;
+            if(invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
-
-
-
     public void pickUpObject(int i) {
 
         if(i != 999){
@@ -151,6 +160,17 @@ public class Player extends Entity{
             if(gp.keyH.enterPressed == true) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
+            }
+        }
+    }
+
+    public void contactMonster(int i) {
+
+        if(i != 999){
+
+            if(invincible == false) {
+                life -= 1;
+                invincible = true;
             }
         }
     }
@@ -196,7 +216,14 @@ public class Player extends Entity{
                 }
                 break;
         }
+
+        if(invincible == true){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
         g2.drawImage(image, screenX, screenY, null);
+
+        //reset alpha
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
     }
 
