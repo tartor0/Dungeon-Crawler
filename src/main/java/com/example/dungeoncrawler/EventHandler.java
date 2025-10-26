@@ -86,15 +86,16 @@ public class EventHandler {
 
     public void damagepit(int col, int row, int gameState) {
         gp.gameState = gameState;
+        gp.playSE(6);
         gp.ui.currentDialogue = "You fall into a pit";
         gp.player.life -= 1;
-//        eventRect[col][row].eventDone = true;
         canTouchEvent = false;
     }
 
     public void healingPool(int col, int row, int gameState) {
         if(gp.keyH.enterPressed == true){
             gp.gameState = gameState;
+            gp.playSE(2);
             gp.ui.currentDialogue = "Health recovered";
             gp.player.life = gp.player.maxLife;
         }

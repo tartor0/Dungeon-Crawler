@@ -12,7 +12,6 @@ public class Entity {
 
     GamePanel gp;
 
-    public int speed;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public Rectangle solidArea = new Rectangle(0,0, 48, 48);
@@ -45,9 +44,24 @@ public class Entity {
     public int dyingCounter = 0;
     public int hpBarCounter = 0;
 
-    //CHARACTER STATUS
+    //CHARACTER ATTRIBUTES
     public int maxLife;
     public int life;
+    public int speed;
+    public int level;
+    public int strength;
+    public int dexterity;
+    public int attack;
+    public int defense;
+    public int exp;
+    public int nextLevelExp;
+    public int coin;
+    public Entity currentWeapon;
+    public Entity currentShield;
+
+    //ITEMS ATTRIBUTES
+    public int attackValue;
+    public int defenseValue;
 
     public Entity(GamePanel gp){
         this.gp = gp;
