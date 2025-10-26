@@ -98,6 +98,7 @@ public class EventHandler {
             gp.playSE(2);
             gp.ui.currentDialogue = "Health recovered";
             gp.player.life = gp.player.maxLife;
+            gp.assetSetter.setMonster();
         }
     }
 
