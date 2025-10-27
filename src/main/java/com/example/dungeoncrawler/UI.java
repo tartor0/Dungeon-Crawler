@@ -175,7 +175,7 @@ public class UI {
 
             //TITLE NAME
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 86F));
-            String text = "Blue Boy Adventure";
+            String text = "T-Crawler's Adventure";
             int x = getXforCenteredText(text);
             int y = gp.tileSize*3;
 
