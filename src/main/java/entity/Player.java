@@ -56,6 +56,8 @@ public class Player extends Entity {
         level = 1;
         maxLife = 6;
         life = maxLife;
+        maxMana = 4;
+        mana = maxMana;
         strength = 1;
         dexterity = 1;
         exp = 0;
@@ -196,13 +198,17 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
 
-        if(keyH.shotPressed == true && projectile.alive == false){
+        if(keyH.shotPressed == true && projectile.alive == false &&
+                shotAvailableCounter == 30 && projectile.haveResource(this) == true){
 
             //DEFAULT VALUES
             projectile.set(worldX, worldY, direction, true, this);
 
             //ADDING TO LIST
             gp.projectileList.add(projectile);
+
+            //SUBTRACT MANA
+            projectile.subtractResources(this);
 
             gp.playSE(10);
         }
@@ -220,6 +226,10 @@ public class Player extends Entity {
         // Reset single-use keys
         gp.keyH.enterPressed = false;
         gp.keyH.attackPressed = false;
+
+        if(shotAvailableCounter < 30) {
+            shotAvailableCounter++;
+        }
     }
 
     public void attacking() {

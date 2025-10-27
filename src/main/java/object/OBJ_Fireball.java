@@ -1,6 +1,7 @@
 package object;
 
 import com.example.dungeoncrawler.GamePanel;
+import entity.Entity;
 import entity.Projectile;
 
 public class OBJ_Fireball extends Projectile {
@@ -28,5 +29,16 @@ public class OBJ_Fireball extends Projectile {
         left2 = setup("/projectiles/fireball_left_2", gp.tileSize, gp.tileSize);
         right1 = setup("/projectiles/fireball_right_1", gp.tileSize, gp.tileSize);
         right2 = setup("/projectiles/fireball_right_2", gp.tileSize, gp.tileSize);
+    }
+    public boolean haveResource(Entity user) {
+        boolean haveResource = false;
+        if(user.mana >= useCost) {
+            haveResource = true;
+        }
+        return haveResource;
+    }
+
+    public void subtractResources(Entity user) {
+        user.mana -= useCost;
     }
 }
