@@ -2,6 +2,7 @@ package entity;
 
 import com.example.dungeoncrawler.GamePanel;
 import com.example.dungeoncrawler.KeyHandler;
+import object.OBJ_Fireball;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
@@ -62,6 +63,7 @@ public class Player extends Entity {
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        projectile = new OBJ_Fireball(gp);
         attack = getAttack();
         defense = getDefense();
     }
@@ -194,6 +196,17 @@ public class Player extends Entity {
             spriteCounter = 0;
         }
 
+        if(keyH.shotPressed == true && projectile.alive == false){
+
+            //DEFAULT VALUES
+            projectile.set(worldX, worldY, direction, true, this);
+
+            //ADDING TO LIST
+            gp.projectileList.add(projectile);
+
+            gp.playSE(10);
+        }
+
         gp.eHandler.checkEvent();
 
         if (invincible) {
@@ -234,7 +247,7 @@ public class Player extends Entity {
             solidArea.height = attackArea.height;
 
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex,attack);
 
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -273,7 +286,7 @@ public class Player extends Entity {
     }
 
     public void contactMonster(int i) {
-        if (i != 999 && !invincible) {
+        if (i != 999 && !invincible && gp.monster[i].dying == false) {
             gp.playSE(6);
 
             int damage = gp.monster[i].attack - defense;
@@ -285,7 +298,7 @@ public class Player extends Entity {
         }
     }
 
-    public void damageMonster(int i) {
+    public void damageMonster(int i, int attack) {
         if (i != 999 && !gp.monster[i].invincible) {
             gp.playSE(5);
 
