@@ -123,6 +123,39 @@ public class Entity {
             }
         }
     };
+    public Color getParticleColor() {
+        Color color = null;
+        return  color;
+    }
+    public int getParticleSize() {
+        int size = 0;
+        return size;
+    }
+    public int getParticleSpeed(){
+        int speed = 0;
+        return speed;
+    }
+    public int getParticleMaxLife(){
+        int maxLife = 0;
+        return maxLife;
+    }
+    public void generateParticle(Entity generator, Entity target){
+
+        Color color = getParticleColor();
+        int size = getParticleSize();
+        int speed = getParticleSpeed();
+        int maxLife = getParticleMaxLife();
+
+        Particles p1 = new Particles(gp, target, color, speed, size, maxLife, -2, -1);
+        Particles p2 = new Particles(gp, target, color, speed, size, maxLife, 2, -1);
+        Particles p3 = new Particles(gp, target, color, speed, size, maxLife, -2, 1);
+        Particles p4 = new Particles(gp, target, color, speed, size, maxLife, 2, 1);
+        gp.particleList.add(p1);
+        gp.particleList.add(p2);
+        gp.particleList.add(p3);
+        gp.particleList.add(p4);
+
+    }
     public void update() {
 
         setAction();

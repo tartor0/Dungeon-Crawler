@@ -1,5 +1,6 @@
 package com.example.dungeoncrawler;
 
+import com.almasb.fxgl.app.MainWindow;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -7,6 +8,7 @@ import tiles_interactive.InteractiveTile;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,7 +19,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16;  //16 x 16 tiles
     final int scale = 3;
     public final int tileSize = originalTileSize * scale; //48 x 48 tiles
-    public final int maxScreenCol = 16;
+    public final int maxScreenCol = 20;
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol;  //768 pixels
     public final int screenHeight = tileSize * maxScreenRow;  //576 pixels
@@ -25,7 +27,12 @@ public class GamePanel extends JPanel implements Runnable{
     //WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-//    public EventHandler eHandler;
+
+    //FOR FULLSCREEN
+    int screenWidth2 = screenWidth;
+    int screenHeight2 = screenHeight;
+    BufferedImage tempScreen;
+    Graphics2D g2;
 
     //FPS
     int FPS = 60;
@@ -47,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity monster[] = new Entity[20];
     public InteractiveTile iTile[] = new InteractiveTile[50];
     public ArrayList<Entity> projectileList = new ArrayList<>();
+    public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
 
 
@@ -75,6 +83,21 @@ public class GamePanel extends JPanel implements Runnable{
         assetSetter.setInteractiveTile();
         playMusic(0);
         gameState = titleState;
+        tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D)tempScreen.getGraphics();
+//        setFullScreen();
+    }
+
+    public void setFullScreen() {
+
+        //Get device information
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(Main.window);
+
+        //GET FULL SCREEN WIDTH AND HEIGHT
+        screenWidth2 = Main.window.getWidth();
+        screenHeight2 = Main.window.getHeight();
     }
 
     public void startGameThread(){
@@ -100,12 +123,13 @@ public class GamePanel extends JPanel implements Runnable{
             timer += (currentTime - lastTime);
             lastTime = currentTime;
 
-            if(delta >=1 ){
+            while (delta >= 1) {
                 update();
-                repaint();
                 delta--;
-                drawCount++;
             }
+            drawToTempScreen();
+            drawToScreen();
+
             if(timer >= 1000000000){
                 System.out.println("FPS: " + drawCount);
                 drawCount = 0;
@@ -153,6 +177,19 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             }
+
+            //particles
+            for(int i = 0; i < particleList.size(); i++){
+                if(particleList.get(i) != null){
+                    if(particleList.get(i).alive == true){
+                        particleList.get(i).update();
+                    }
+                    if(particleList.get(i).alive == false){
+                        particleList.remove(i);
+                    }
+                }
+            }
+
             for (int i = 0; i < iTile.length; i++){
                 if(iTile[i] != null){
                     iTile[i].update();
@@ -166,9 +203,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
+    public void drawToTempScreen(){
 
         //TITLE SCREEN
         if(gameState == titleState){
@@ -205,6 +240,11 @@ public class GamePanel extends JPanel implements Runnable{
                     entityList.add(projectileList.get(i));
                 }
             }
+            for(int i = 0; i < particleList.size(); i++){
+                if(particleList.get(i) != null){
+                    entityList.add(particleList.get(i));
+                }
+            }
             for(int i = 0; i < obj.length; i++){
                 if(obj[i] != null){
                     entityList.add(obj[i]);
@@ -237,7 +277,6 @@ public class GamePanel extends JPanel implements Runnable{
         if(keyH.showDebugText == true){
             drawStart = System.nanoTime();
         }
-
         //DEBUG
         if(keyH.showDebugText == true){
             long drawEnd = System.nanoTime();
@@ -245,9 +284,12 @@ public class GamePanel extends JPanel implements Runnable{
             g2.setColor(Color.white);
             g2.drawString("Draw Time: " + passed, 10, 400);
         }
-        g2.dispose();
     }
-
+    public void drawToScreen(){
+        Graphics g = getGraphics();
+        g.drawImage(tempScreen, 0, 0, screenWidth2, screenHeight2, null);
+        g.dispose();
+    }
     public void playMusic(int i) {
         music.setFile(i);
         music.play();
