@@ -33,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable{
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D g2;
+    public boolean fullScreenOn = false;
 
     //FPS
     int FPS = 60;
@@ -65,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int pauseState = 2;
     public final int dialogueState = 3;
     public final int characterState = 4;
+    public final int optionState = 5;
+    public final int gameOverState = 6;
 
 
 
@@ -87,7 +90,22 @@ public class GamePanel extends JPanel implements Runnable{
         g2 = (Graphics2D)tempScreen.getGraphics();
 //        setFullScreen();
     }
-
+    public void retry() {
+        player.setDefaultPositions();
+        player.restoreLifeandMana();
+        assetSetter.setNPC();
+        assetSetter.setMonster();
+    }
+    public void restart() {
+        player.setDefaultValues();
+        player.setDefaultPositions();
+        player.restoreLifeandMana();
+        player.setItems();
+        assetSetter.setObject();
+        assetSetter.setNPC();
+        assetSetter.setMonster();
+        assetSetter.setInteractiveTile();
+    }
     public void setFullScreen() {
 
         //Get device information
@@ -204,6 +222,10 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void drawToTempScreen(){
+
+        // 🧹 Clear buffer first
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, screenWidth, screenHeight);
 
         //TITLE SCREEN
         if(gameState == titleState){
