@@ -11,7 +11,7 @@ public class Sound {
     Clip clip;
     URL soundURL[] = new URL[30];
     FloatControl fc;
-    int volumeScale = 3; //here we divided the actual colume scale which is 5, but 0-5 which is actaully 6 by 2
+    int volumeScale = 3; //here we divided the actual volume scale which is 5, but 0-5 which is actaully 6 by 2
     float volume;
 
     public Sound() {
@@ -29,7 +29,7 @@ public class Sound {
         soundURL[10] = getClass().getResource("/sound/burning.wav");
         soundURL[11] = getClass().getResource("/sound/cuttree.wav");
         soundURL[12] = getClass().getResource("/sound/gameover.wav");
-
+        soundURL[13] = getClass().getResource("/sound/stairs.wav");
 
 
     }

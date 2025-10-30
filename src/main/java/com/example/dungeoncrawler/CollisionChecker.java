@@ -26,32 +26,32 @@ public class CollisionChecker {
         switch (entity.direction) {
             case "up":
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "down":
                 entityBottomRow = (entityBottomWorldY + entity.speed) / gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "left":
                 entityLeftCol = (entityLeftWorldX - entity.speed) / gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityLeftCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityLeftCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityLeftCol][entityBottomRow];
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
                 break;
             case "right":
                 entityRightCol = (entityRightWorldX + entity.speed) / gp.tileSize;
-                tileNum1 = gp.tileM.mapTileNum[entityRightCol][entityTopRow];
-                tileNum2 = gp.tileM.mapTileNum[entityRightCol][entityBottomRow];
+                tileNum1 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityTopRow];
+                tileNum2 = gp.tileM.mapTileNum[gp.currentMap][entityRightCol][entityBottomRow];
                 if (gp.tileM.tile[tileNum1].collision || gp.tileM.tile[tileNum2].collision) {
                     entity.collisionOn = true;
                 }
@@ -62,8 +62,8 @@ public class CollisionChecker {
     public int checkObject(Entity entity, boolean player) {
         int index = 999;
 
-        for (int i = 0; i < gp.obj.length; i++) {
-            if (gp.obj[i] == null) continue;
+        for (int i = 0; i < gp.obj[1].length; i++) {
+            if (gp.obj[gp.currentMap][i] == null) continue;
 
             // Predictive bounding boxes
             int entityLeft = entity.worldX + entity.solidArea.x;
@@ -71,10 +71,10 @@ public class CollisionChecker {
             int entityTop = entity.worldY + entity.solidArea.y;
             int entityBottom = entityTop + entity.solidArea.height;
 
-            int objLeft = gp.obj[i].worldX + gp.obj[i].solidArea.x;
-            int objRight = objLeft + gp.obj[i].solidArea.width;
-            int objTop = gp.obj[i].worldY + gp.obj[i].solidArea.y;
-            int objBottom = objTop + gp.obj[i].solidArea.height;
+            int objLeft = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
+            int objRight = objLeft + gp.obj[gp.currentMap][i].solidArea.width;
+            int objTop = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
+            int objBottom = objTop + gp.obj[gp.currentMap][i].solidArea.height;
 
             switch (entity.direction) {
                 case "up": entityTop -= entity.speed; break;
@@ -87,7 +87,7 @@ public class CollisionChecker {
                     entityBottom > objTop && entityTop < objBottom;
 
             if (intersects) {
-                if (gp.obj[i].collision) entity.collisionOn = true;
+                if (gp.obj[gp.currentMap][i].collision) entity.collisionOn = true;
                 if (player) index = i;
             }
         }
@@ -95,21 +95,21 @@ public class CollisionChecker {
         return index;
     }
 
-    public int checkEntity(Entity entity, Entity[] target) {
+    public int checkEntity(Entity entity, Entity[] [] target) {
         int index = 999;
 
-        for (int i = 0; i < target.length; i++) {
-            if (target[i] == null) continue;
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[gp.currentMap][i] == null) continue;
 
             int entityLeft = entity.worldX + entity.solidArea.x;
             int entityRight = entityLeft + entity.solidArea.width;
             int entityTop = entity.worldY + entity.solidArea.y;
             int entityBottom = entityTop + entity.solidArea.height;
 
-            int targetLeft = target[i].worldX + target[i].solidArea.x;
-            int targetRight = targetLeft + target[i].solidArea.width;
-            int targetTop = target[i].worldY + target[i].solidArea.y;
-            int targetBottom = targetTop + target[i].solidArea.height;
+            int targetLeft = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x;
+            int targetRight = targetLeft + target[gp.currentMap][i].solidArea.width;
+            int targetTop = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
+            int targetBottom = targetTop + target[gp.currentMap][i].solidArea.height;
 
             switch (entity.direction) {
                 case "up": entityTop -= entity.speed; break;
@@ -122,7 +122,7 @@ public class CollisionChecker {
                     entityBottom > targetTop && entityTop < targetBottom;
 
             if (intersects) {
-                if(target[i] != entity) {
+                if(target[gp.currentMap][i] != entity) {
                     entity.collisionOn = true;
                     index = i;
                 }
