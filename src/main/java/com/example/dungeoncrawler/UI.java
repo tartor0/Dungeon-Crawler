@@ -719,6 +719,7 @@ public class UI {
             if(gp.keyH.enterPressed == true) {
                 subState = 0;
                 gp.gameState = gp.titleState;
+
             }
         }
 

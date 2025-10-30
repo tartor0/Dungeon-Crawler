@@ -72,42 +72,13 @@ public class KeyHandler implements KeyListener {
             if(code == KeyEvent.VK_ENTER) {
                 if(gp.ui.commandNum == 0){
                     gp.gameState = gp.playState;
-//                    gp.ui.titleScreenState = 1;
                 }
                 if(gp.ui.commandNum == 1){
-
+                    gp.saveLoad.load();
+                    gp.gameState = gp.playState;
                 }
                 if(gp.ui.commandNum == 2){
                     System.exit(0);
-                }
-            }
-        }
-
-        else if(gp.ui.titleScreenState == 1) {
-            if(code == KeyEvent.VK_UP){
-                gp.ui.commandNum--;
-                if(gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 3;
-                }
-            }
-            if(code == KeyEvent.VK_DOWN){
-                gp.ui.commandNum++;
-                if(gp.ui.commandNum > 3) {
-                    gp.ui.commandNum = 0;
-                }
-            }
-            if(code == KeyEvent.VK_ENTER) {
-                if(gp.ui.commandNum == 0){
-                    gp.gameState = gp.playState;
-                }
-                if(gp.ui.commandNum == 1){
-                    gp.gameState = gp.playState;
-                }
-                if(gp.ui.commandNum == 2){
-                    gp.gameState = gp.playState;
-                }
-                if(gp.ui.commandNum == 3){
-                    gp.ui.titleScreenState = 0;
                 }
             }
         }
@@ -174,11 +145,11 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             if(gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.retry();
+                gp.resetGame(false);
             }
             else if(gp.ui.commandNum == 1){
                 gp.gameState = gp.titleState;
-                gp.restart();
+                gp.resetGame(true);
             }
         }
     }

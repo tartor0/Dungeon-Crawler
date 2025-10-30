@@ -1,6 +1,7 @@
 package com.example.dungeoncrawler;
 
 import com.almasb.fxgl.app.MainWindow;
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import tile.TileManager;
@@ -40,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable{
     //FPS
     int FPS = 60;
 
+    //SYSTEM
     TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
@@ -48,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
     public AssetSetter assetSetter = new AssetSetter(this);
     public EventHandler eHandler = new EventHandler(this);
     public UI ui = new UI(this);
+    SaveLoad saveLoad = new SaveLoad(this);
     Thread gameThread;
 
     //ENTITY AND OBJECT
@@ -92,21 +95,17 @@ public class GamePanel extends JPanel implements Runnable{
         g2 = (Graphics2D)tempScreen.getGraphics();
 //        setFullScreen();
     }
-    public void retry() {
+    public void resetGame(boolean restart) {
         player.setDefaultPositions();
-        player.restoreLifeandMana();
+        player.restoreStatus();
         assetSetter.setNPC();
         assetSetter.setMonster();
-    }
-    public void restart() {
-        player.setDefaultValues();
-        player.setDefaultPositions();
-        player.restoreLifeandMana();
-        player.setItems();
-        assetSetter.setObject();
-        assetSetter.setNPC();
-        assetSetter.setMonster();
-        assetSetter.setInteractiveTile();
+
+        if(restart == true) {
+            player.setDefaultValues();
+            assetSetter.setObject();
+            assetSetter.setInteractiveTile();
+        }
     }
     public void setFullScreen() {
 

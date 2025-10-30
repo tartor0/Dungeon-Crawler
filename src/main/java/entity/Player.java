@@ -41,9 +41,6 @@ public class Player extends Entity {
 
 
         setDefaultValues();
-        getPlayerImage();
-        getPlayerAttack();
-        setItems();
     }
 
     public void setDefaultValues() {
@@ -68,6 +65,10 @@ public class Player extends Entity {
         projectile = new OBJ_Fireball(gp);
         attack = getAttack();
         defense = getDefense();
+
+        getPlayerImage();
+        getPlayerAttack();
+        setItems();
     }
 
     public void setDefaultPositions() {
@@ -76,10 +77,12 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         direction = "down";
     }
-    public void restoreLifeandMana() {
+    public void restoreStatus() {
         life = maxLife;
         mana = maxMana;
         invincible = false;
+        attacking = false;
+
     }
     public void setItems() {
         inventory.clear();

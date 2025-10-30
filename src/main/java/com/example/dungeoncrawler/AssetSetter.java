@@ -2,6 +2,7 @@ package com.example.dungeoncrawler;
 
 import entity.NPC_OldMan;
 import monster.MON_GreenSlime;
+import monster.MON_RedSlime;
 import object.*;
 import tiles_interactive.IT_DryTree;
 
@@ -85,6 +86,14 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize*38;
         gp.monster[mapNum][i].worldY = gp.tileSize*42;
         i++;
+
+//        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+//        gp.monster[mapNum][i].worldX = gp.tileSize*36;
+//        gp.monster[mapNum][i].worldY = gp.tileSize*36;
+//        i++;
+//        gp.monster[mapNum][i] = new MON_RedSlime(gp);
+//        gp.monster[mapNum][i].worldX = gp.tileSize*40;
+//        gp.monster[mapNum][i].worldY = gp.tileSize*37;
 
     }
     public void setInteractiveTile() {

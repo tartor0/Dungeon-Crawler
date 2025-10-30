@@ -99,10 +99,11 @@ public class EventHandler {
         if(gp.keyH.enterPressed == true){
             gp.gameState = gameState;
             gp.playSE(2);
-            gp.ui.currentDialogue = "Health and Mana recovered";
+            gp.ui.currentDialogue = "Health and Mana recovered, \n(DATA HAS BEEN SAVED)";
             gp.player.life = gp.player.maxLife;
             gp.player.mana = gp.player.maxMana;
             gp.assetSetter.setMonster();
+            gp.saveLoad.save();
         }
     }
     public void teleport(int map, int col, int row){
