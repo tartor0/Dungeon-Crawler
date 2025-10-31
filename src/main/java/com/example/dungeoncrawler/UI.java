@@ -238,7 +238,7 @@ public class UI {
             g2.drawImage(gp.player.down1, x, y, gp.tileSize*2, gp.tileSize*2, null);
 
             //MENU
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 35F));
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 42F));
 
             text = "NEW GAME";
             x = getXforCenteredText(text);
@@ -442,7 +442,7 @@ public class UI {
     public void drawInventory() {
 
         //FRAME
-        int frameX = gp.tileSize*9;
+        int frameX = gp.tileSize*13;
         int frameY = gp.tileSize;
         int frameWidth = gp.tileSize*6;
         int frameHeight = gp.tileSize*5;
@@ -704,10 +704,6 @@ public class UI {
 
         currentDialogue = "Quit the game and \nreturn to home?";
 
-        for(String line : currentDialogue.split("\n")) {
-            g2.drawString(line, textX, textY);
-            textY += 40;
-        }
 
         //YES
         String text = "Yes";
@@ -736,6 +732,7 @@ public class UI {
             }
         }
     }
+    //Reusable function for drawing dark boxes with white borders
     public void drawSubWindow(int x, int y, int width, int height) {
 
         Color c = new Color(0,0,0, 210);

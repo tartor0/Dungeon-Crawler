@@ -101,7 +101,6 @@ public class TileManager {
     }
 
     //reading/loading map from txt file
-
     public void loadMap(String filePath, int map) {
         try{
             InputStream is = getClass().getResourceAsStream(filePath);

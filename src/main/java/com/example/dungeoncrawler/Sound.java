@@ -9,7 +9,7 @@ import java.net.URL;
 public class Sound {
 
     Clip clip;
-    URL soundURL[] = new URL[30];
+    URL soundURL[] = new URL[30];  //array that stores the file paths of your sound files
     FloatControl fc;
     int volumeScale = 3; //here we divided the actual volume scale which is 5, but 0-5 which is actaully 6 by 2
     float volume;
@@ -30,6 +30,7 @@ public class Sound {
         soundURL[11] = getClass().getResource("/sound/cuttree.wav");
         soundURL[12] = getClass().getResource("/sound/gameover.wav");
         soundURL[13] = getClass().getResource("/sound/stairs.wav");
+        soundURL[14] = getClass().getResource("/sound/blocked.wav");
 
 
     }
@@ -59,7 +60,7 @@ public class Sound {
     }
 
     public void checkVolume() {
-
+        // This method adjusts the volume level of your sound
         switch (volumeScale) {
             case 0: volume = -80f; break;
             case 1: volume = -20f; break;

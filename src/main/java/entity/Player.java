@@ -20,7 +20,6 @@ public class Player extends Entity {
     public final int screenY;
     boolean moving = false;
     int pixelCounter = 0;
-    int standCounter = 0;
     public ArrayList<Entity> inventory = new ArrayList<>();
     public final int maxInventorySize = 20;
 
@@ -74,7 +73,6 @@ public class Player extends Entity {
     }
 
     public void setDefaultPositions() {
-
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         direction = "down";
@@ -90,7 +88,6 @@ public class Player extends Entity {
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(new OBJ_Key(gp));
     }
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
@@ -149,7 +146,7 @@ public class Player extends Entity {
             return;
         }
 
-        // 🔹 Movement input
+        //  Movement input
         if (!moving) {
             if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
                 if (keyH.upPressed) direction = "up";
@@ -163,16 +160,10 @@ public class Player extends Entity {
                 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
                 interactNPC(npcIndex);
                 moving = false;
-            } else {
-                standCounter++;
-                if (standCounter == 20) {
-                    spriteNum = 1;
-                    standCounter = 0;
-                }
             }
         }
 
-        // 🔹 Movement logic
+        // Movement logic
         if (moving) {
 
             //CHECK TILE COLLISION
@@ -194,6 +185,7 @@ public class Player extends Entity {
             //CHECK ITILE COLLISION
             int iTilendex = gp.cChecker.checkEntity(this, gp.iTile);
 
+            //Updates the player’s world coordinates (worldX, worldY) based on their direction and speed.
             if (!collisionOn) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
@@ -322,6 +314,7 @@ public class Player extends Entity {
             attacking = false;
         }
     }
+
     public void damageInteractiveTile(int i) {
 
         if(i !=999 && gp.iTile[gp.currentMap][i].destructible == true &&
@@ -375,7 +368,7 @@ public class Player extends Entity {
 
             // If guarding, block the attack instead of taking damage
             if (guarding) {
-                gp.playSE(11); // (optional) block sound effect
+                gp.playSE(14);
                 gp.ui.addMessage("Blocked!");
                 // Small knockback or just ignore damage
                 invincible = true;
@@ -445,9 +438,9 @@ public class Player extends Entity {
 
             Entity selectedItem = inventory.get(itemIndex);
             if(selectedItem.type == type_sword || selectedItem.type == type_axe){
-                getPlayerAttack();
-                currentWeapon = selectedItem;
-                attack = getAttack();
+                getPlayerAttack(); //updates the player’s attack settings
+                currentWeapon = selectedItem;  //equips the new weapon.
+                attack = getAttack();  //recalculates the player’s total attack value (based on strength + weapon’s power).
             }
             if(selectedItem.type == type_shield){
                 currentShield = selectedItem;
@@ -455,10 +448,11 @@ public class Player extends Entity {
             }
             if(selectedItem.type == type_consumable){
                 selectedItem.use(this);
-                inventory.remove(itemIndex);
+                inventory.remove(itemIndex);  //remove it from inventory after use
             }
         }
     }
+
     public void draw(Graphics2D g2) {
 
         BufferedImage image = null;

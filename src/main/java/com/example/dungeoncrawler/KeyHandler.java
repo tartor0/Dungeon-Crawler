@@ -1,7 +1,7 @@
 package com.example.dungeoncrawler;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.KeyListener; //interface that allows your program to listen for keyboard input events
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
@@ -17,7 +17,9 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        //when any key is pressed this get this keycode e.g w
         int code = e.getKeyCode();
+
 
         //TITLE STATE
         if(gp.gameState == gp.titleState) {
