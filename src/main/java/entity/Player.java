@@ -8,6 +8,7 @@ import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -68,6 +69,7 @@ public class Player extends Entity {
 
         getPlayerImage();
         getPlayerAttack();
+        getPlayerGuard();
         setItems();
     }
 
@@ -131,6 +133,12 @@ public class Player extends Entity {
             attackRight1 = setup("/player/boy_axe_right_1", gp.tileSize * 2, gp.tileSize);
             attackRight2 = setup("/player/boy_axe_right_2", gp.tileSize * 2, gp.tileSize);
         }
+    }
+    public void getPlayerGuard() {
+        guardUp = setup("/player/boy_guard_up", gp.tileSize, gp.tileSize);
+        guardDown = setup("/player/boy_guard_down", gp.tileSize, gp.tileSize);
+        guardLeft = setup("/player/boy_guard_left", gp.tileSize, gp.tileSize);
+        guardRight = setup("/player/boy_guard_right", gp.tileSize, gp.tileSize);
     }
 
     public void update() {
@@ -247,6 +255,12 @@ public class Player extends Entity {
             }
         }
 
+        if (keyH.guardPressed) {
+            guarding = true;
+        } else {
+            guarding = false;
+        }
+
         // Reset single-use keys
         gp.keyH.enterPressed = false;
         gp.keyH.attackPressed = false;
@@ -358,16 +372,27 @@ public class Player extends Entity {
 
     public void contactMonster(int i) {
         if (i != 999 && !invincible && gp.monster[gp.currentMap][i].dying == false) {
-            gp.playSE(6);
 
-            int damage = gp.monster[gp.currentMap][i].attack - defense;
-            if(damage < 0) {
-                damage = 0;
+            // If guarding, block the attack instead of taking damage
+            if (guarding) {
+                gp.playSE(11); // (optional) block sound effect
+                gp.ui.addMessage("Blocked!");
+                // Small knockback or just ignore damage
+                invincible = true;
+                invincibleCounter = 0;
+                return;
             }
+
+            // If not guarding, take damage as normal
+            gp.playSE(6);
+            int damage = gp.monster[gp.currentMap][i].attack - defense;
+            if (damage < 0) damage = 0;
+
             life -= damage;
             invincible = true;
         }
     }
+
 
     public void damageMonster(int i, int attack) {
         if (i != 999 && !gp.monster[gp.currentMap][i].invincible) {
@@ -399,6 +424,7 @@ public class Player extends Entity {
             level++;
             nextLevelExp = nextLevelExp*2;
             maxLife += 2;
+            maxMana += 2;
             strength++;
             dexterity++;
             attack = getAttack();
@@ -459,6 +485,9 @@ public class Player extends Entity {
                         image = attackUp2;
                     }
                 }
+                if(guarding == true) {
+                    image = guardUp;
+                }
                 break;
 
             case "down":
@@ -477,6 +506,9 @@ public class Player extends Entity {
                     if (spriteNum == 2) {
                         image = attackDown2;
                     }
+                }
+                if(guarding == true) {
+                    image = guardDown;
                 }
                 break;
 
@@ -498,6 +530,9 @@ public class Player extends Entity {
                         image = attackLeft2;
                     }
                 }
+                if(guarding == true) {
+                    image = guardLeft;
+                }
                 break;
 
             case "right":
@@ -516,6 +551,9 @@ public class Player extends Entity {
                     if (spriteNum == 2) {
                         image = attackRight2;
                     }
+                }
+                if(guarding == true) {
+                    image = guardRight;
                 }
                 break;
         }

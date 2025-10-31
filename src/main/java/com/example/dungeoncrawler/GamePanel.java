@@ -224,7 +224,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void drawToTempScreen(){
 
-        // 🧹 Clear buffer first
         g2.setColor(Color.black);
         g2.fillRect(0, 0, screenWidth, screenHeight);
 

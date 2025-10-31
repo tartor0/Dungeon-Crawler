@@ -13,7 +13,8 @@ public class Entity {
     GamePanel gp;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1,
+            attackLeft2, attackRight1, attackRight2, guardUp, guardDown, guardLeft, guardRight;
     public Rectangle solidArea = new Rectangle(0,0, 48, 48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -35,6 +36,7 @@ public class Entity {
     public boolean alive = true;
     public boolean dying = false;
     public boolean hpBarOn = false;
+    public boolean guarding = false;
 
     //COUNTER
     public int spriteCounter = 0;
